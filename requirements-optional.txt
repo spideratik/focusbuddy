@@ -1,0 +1,5 @@
+# Enables real gaze/face-landmark detection instead of the simulation
+# fallback. Install separately - if this fails on your platform/Python
+# version, the app still runs fine without it (focus_detector.py falls
+# back to a labeled simulation automatically).
+mediapipe==0.10.14

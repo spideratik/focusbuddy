@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FocusBuddy — study session</title>
+<link rel="manifest" href="/static/manifest.json">
+<link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+<meta name="theme-color" content="#6B8F71">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <div class="account-bar">
+    <span>Logged in as <strong>{{ username }}</strong></span>
+    <button id="logout-btn">Log out</button>
+  </div>
+
+  <header class="masthead">
+    <span class="eyebrow">Study companion</span>
+    <h1>FocusBuddy</h1>
+    <p class="tagline">A quiet helper that notices when focus drifts, and says so kindly.</p>
+  </header>
+
+  <section class="entry" id="setup-panel">
+    <h2>Start a session</h2>
+    <div class="field-row">
+      <label for="child-name">Child's name</label>
+      <input type="text" id="child-name" value="Alex" placeholder="e.g. Alex">
+    </div>
+    <div class="field-row">
+      <label for="child-age">Child's age (optional)</label>
+      <input type="number" id="child-age" min="3" max="18" placeholder="e.g. 8">
+    </div>
+    <div class="field-row">
+      <label for="task">Task (optional)</label>
+      <input type="text" id="task" placeholder="e.g. Reading, Math homework">
+    </div>
+    <div class="field-row">
+      <label for="material-position">Where's the study material?</label>
+      <select id="material-position">
+        <option value="desk" selected>On the desk (physical book/notebook)</option>
+        <option value="screen">On this device's screen</option>
+      </select>
+    </div>
+    <p class="consent-note">
+      This matters: if your material's on the desk, looking down at it
+      naturally hides your eyes from the camera — the app treats that as
+      good (reading), not distracted. Get this backwards for your setup
+      and focused/distracted will look flipped.
+    </p>
+    <div class="field-row">
+      <label for="language">Spoken language</label>
+      <select id="language">
+        <option value="bn-BD" selected>Bengali</option>
+        <option value="en-US">English (US)</option>
+        <option value="en-GB">English (UK)</option>
+        <option value="es-ES">Spanish</option>
+        <option value="fr-FR">French</option>
+        <option value="hi-IN">Hindi</option>
+      </select>
+    </div>
+
+    <div class="voice-recorder">
+      <h3>Record your own guidance clips (optional)</h3>
+      <p class="consent-note">
+        Read the line below aloud in your own voice. This is a real
+        recording of you, played back exactly as-is later — nothing here
+        is synthesized or cloned. Edit the text first if you'd rather say
+        it your own way.
+      </p>
+
+      <div class="clip-script" data-situation="looking_away">
+        <h4>When attention drifts</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="looking_away">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="looking_away">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="looking_away">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="looking_away"></ul>
+      </div>
+
+      <div class="clip-script" data-situation="playing_with_phone">
+        <h4>When on a phone or other object</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="playing_with_phone">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="playing_with_phone">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="playing_with_phone">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="playing_with_phone"></ul>
+      </div>
+
+      <div class="clip-script" data-situation="away_from_desk">
+        <h4>When away from the desk</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="away_from_desk">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="away_from_desk">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="away_from_desk">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="away_from_desk"></ul>
+      </div>
+
+      <div class="clip-script" data-situation="sleeping_drowsy">
+        <h4>When drowsy</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="sleeping_drowsy">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="sleeping_drowsy">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="sleeping_drowsy">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="sleeping_drowsy"></ul>
+      </div>
+
+      <div class="clip-script" data-situation="talking">
+        <h4>When talking during solo study</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="talking">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="talking">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="talking">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="talking"></ul>
+      </div>
+
+      <h3>Encouragement clips (optional)</h3>
+      <p class="consent-note">
+        These play once when the app notices your child settle into
+        reading, writing, or a thoughtful pause — praise instead of
+        correction. Skip any of these you don't want; the app just won't
+        say anything for that situation.
+      </p>
+
+      <div class="clip-script" data-situation="reading">
+        <h4>While reading well</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="reading">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="reading">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="reading">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="reading"></ul>
+      </div>
+
+      <div class="clip-script" data-situation="writing">
+        <h4>While writing well</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="writing">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="writing">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="writing">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="writing"></ul>
+      </div>
+
+      <div class="clip-script" data-situation="memorizing">
+        <h4>While pausing to remember something</h4>
+        <textarea class="script-text" rows="2"></textarea>
+        <div class="recorder-controls">
+          <button class="btn btn-secondary record-btn" data-situation="memorizing">● Record</button>
+          <audio class="preview-audio" controls hidden></audio>
+          <button class="btn btn-primary save-clip-btn" hidden data-situation="memorizing">Save clip</button>
+          <button class="btn btn-secondary record-again-btn" hidden data-situation="memorizing">Record again</button>
+        </div>
+        <ul class="saved-clips-list" data-situation="memorizing"></ul>
+      </div>
+    </div>
+
+    <p class="consent-note">
+      Your browser will ask for camera and microphone permission when you press Start.
+      Nothing is recorded to disk — frames are analyzed and discarded, and only
+      transcribed text (not audio) is kept in the report.
+    </p>
+
+    <div class="field-row checkbox-row">
+      <input type="checkbox" id="training-mode-checkbox">
+      <label for="training-mode-checkbox">
+        Training mode — label activities yourself during this session to
+        train a custom detector (optional, advanced)
+      </label>
+    </div>
+
+    <button id="start-btn" class="btn btn-primary">Start session</button>
+  </section>
+
+  <section class="entry" id="calibration-panel">
+    <h2>Calibrate detection to your setup <span class="opt-tag">recommended</span></h2>
+    <p class="consent-note">
+      Generic thresholds don't fit every camera angle, desk, or lighting.
+      This ~15-second guided check personalizes detection to your actual
+      setup, which is the single biggest thing you can do to improve
+      accuracy. Takes a webcam snapshot every second during each phase —
+      nothing is saved except the resulting numbers.
+    </p>
+    <p id="calibration-status-text" class="consent-note"></p>
+    <button id="calibrate-start-btn" class="btn btn-primary">Start calibration</button>
+    <button id="calibrate-reset-btn" class="btn btn-secondary" hidden>Reset calibration</button>
+
+    <div id="calibration-live" hidden>
+      <video id="calibration-video" autoplay muted playsinline></video>
+      <canvas id="calibration-canvas" hidden></canvas>
+      <p class="calibration-phase-label" id="calibration-phase-label"></p>
+      <div class="calibration-progress-bar"><div id="calibration-progress-fill"></div></div>
+    </div>
+  </section>
+
+  <section class="entry" id="live-panel" hidden>
+    <h2>Session in progress</h2>
+    <div class="live-grid">
+      <div class="camera-box">
+        <video id="camera-feed" autoplay muted playsinline></video>
+        <canvas id="capture-canvas" hidden></canvas>
+      </div>
+      <div class="status-box">
+        <div class="avatar-box">
+          <svg id="tutor-avatar" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- collar -->
+            <path d="M 22 200 L 22 178 Q 100 148 178 178 L 178 200 Z" fill="var(--focus-green)" stroke="var(--ink)" stroke-width="3"/>
+            <!-- ears -->
+            <ellipse cx="38" cy="100" rx="10" ry="14" fill="#EFC9A0" stroke="var(--ink)" stroke-width="3"/>
+            <ellipse cx="162" cy="100" rx="10" ry="14" fill="#EFC9A0" stroke="var(--ink)" stroke-width="3"/>
+            <!-- head -->
+            <circle cx="100" cy="98" r="62" fill="#EFC9A0" stroke="var(--ink)" stroke-width="3"/>
+            <!-- hair -->
+            <path d="M 38 88 A 62 62 0 0 1 162 88 L 158 65 Q 100 42 42 65 Z" fill="#3B2A22" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M 36 92 Q 33 75 42 62" fill="none" stroke="#3B2A22" stroke-width="9" stroke-linecap="round"/>
+            <path d="M 164 92 Q 167 75 158 62" fill="none" stroke="#3B2A22" stroke-width="9" stroke-linecap="round"/>
+            <!-- cheeks (blush, shown on happy expression) -->
+            <circle id="avatar-cheek-left" cx="60" cy="122" r="11" fill="var(--distract-amber)" opacity="0"/>
+            <circle id="avatar-cheek-right" cx="140" cy="122" r="11" fill="var(--distract-amber)" opacity="0"/>
+            <!-- glasses -->
+            <circle cx="75" cy="100" r="19" fill="var(--card)" opacity="0.55" stroke="var(--ink)" stroke-width="3"/>
+            <circle cx="125" cy="100" r="19" fill="var(--card)" opacity="0.55" stroke="var(--ink)" stroke-width="3"/>
+            <path d="M 94 98 L 106 98" stroke="var(--ink)" stroke-width="3"/>
+            <path d="M 56 98 L 46 94" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 144 98 L 154 94" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+            <!-- eyebrows (expression-driven) -->
+            <path id="avatar-eyebrow-left" d="M 61 76 Q 75 68 89 76" stroke="var(--ink)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path id="avatar-eyebrow-right" d="M 111 76 Q 125 68 139 76" stroke="var(--ink)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <!-- eyes (blink via CSS) -->
+            <g id="avatar-eyes">
+              <ellipse id="avatar-eye-left" cx="75" cy="100" rx="6" ry="8" fill="var(--ink)"/>
+              <ellipse id="avatar-eye-right" cx="125" cy="100" rx="6" ry="8" fill="var(--ink)"/>
+            </g>
+            <circle cx="77" cy="97" r="1.6" fill="var(--card)"/>
+            <circle cx="127" cy="97" r="1.6" fill="var(--card)"/>
+            <!-- nose -->
+            <path d="M 100 102 Q 96 114 100 118 Q 103 119 106 117" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- mouth (expression + talking driven) -->
+            <path id="avatar-mouth" d="M 78 132 Q 100 144 122 132" stroke="var(--ink)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </svg>
+          <p class="avatar-caption" id="avatar-caption">Your tutor — an animated helper, not a real person</p>
+        </div>
+        <div class="state-indicator" id="state-indicator">
+          <span class="state-dot"></span>
+          <span class="state-label" id="state-label">Getting started…</span>
+        </div>
+        <p class="activity-label" id="activity-label" hidden></p>
+        <p class="backend-label" id="backend-label" hidden></p>
+        <dl class="metric-list">
+          <div><dt>Focused</dt><dd id="metric-focused">0s</dd></div>
+          <div><dt>Distracted</dt><dd id="metric-distracted">0s</dd></div>
+          <div><dt>Unknown</dt><dd id="metric-unknown">0s</dd></div>
+        </dl>
+        <dl class="metric-list metric-list-secondary" id="activity-breakdown">
+          <div><dt>Reading</dt><dd id="metric-READING">0s</dd></div>
+          <div><dt>Writing</dt><dd id="metric-WRITING">0s</dd></div>
+          <div><dt>Memorizing</dt><dd id="metric-MEMORIZING">0s</dd></div>
+          <div><dt>Looking away</dt><dd id="metric-LOOKING_AWAY">0s</dd></div>
+          <div><dt>On phone</dt><dd id="metric-PLAYING_WITH_PHONE">0s</dd></div>
+          <div><dt>Talking</dt><dd id="metric-TALKING">0s</dd></div>
+          <div><dt>Away from desk</dt><dd id="metric-AWAY_FROM_DESK">0s</dd></div>
+          <div><dt>Drowsy</dt><dd id="metric-SLEEPING_DROWSY">0s</dd></div>
+        </dl>
+        <div class="alert-banner" id="alert-banner" hidden></div>
+        <button id="stop-btn" class="btn btn-secondary">End session</button>
+      </div>
+    </div>
+    <div class="transcript-feed">
+      <h3>What {name} has said</h3>
+      <ul id="transcript-list"><li class="muted">Nothing yet.</li></ul>
+    </div>
+
+    <div class="entry training-panel" id="training-panel" hidden>
+      <h3>Label what's actually happening</h3>
+      <p class="consent-note">
+        Click whichever matches right now. Each click logs the detector's
+        current numeric readings (position, motion, eye visibility — never
+        an image) tagged with your label, building a dataset to train a
+        custom model from.
+      </p>
+      <div class="training-buttons">
+        <button class="btn btn-secondary train-label-btn" data-label="READING">Reading <span class="training-count" data-label="READING">0</span></button>
+        <button class="btn btn-secondary train-label-btn" data-label="WRITING">Writing <span class="training-count" data-label="WRITING">0</span></button>
+        <button class="btn btn-secondary train-label-btn" data-label="MEMORIZING">Memorizing <span class="training-count" data-label="MEMORIZING">0</span></button>
+        <button class="btn btn-secondary train-label-btn" data-label="LOOKING_AWAY">Looking away <span class="training-count" data-label="LOOKING_AWAY">0</span></button>
+        <button class="btn btn-secondary train-label-btn" data-label="PLAYING_WITH_PHONE">On phone <span class="training-count" data-label="PLAYING_WITH_PHONE">0</span></button>
+        <button class="btn btn-secondary train-label-btn" data-label="AWAY_FROM_DESK">Away from desk <span class="training-count" data-label="AWAY_FROM_DESK">0</span></button>
+        <button class="btn btn-secondary train-label-btn" data-label="SLEEPING_DROWSY">Drowsy <span class="training-count" data-label="SLEEPING_DROWSY">0</span></button>
+        <button class="btn btn-secondary train-label-btn" data-label="TALKING">Talking <span class="training-count" data-label="TALKING">0</span></button>
+      </div>
+      <div class="training-actions">
+        <button id="train-fit-btn" class="btn btn-primary">Train model now</button>
+        <button id="train-reset-btn" class="btn btn-secondary">Reset training data</button>
+      </div>
+      <p id="train-status-message" class="consent-note"></p>
+
+      <h3>Bulk-add examples from a video</h3>
+      <p class="consent-note">
+        Upload a short clip where {name} is doing ONE thing the whole time
+        (e.g. a minute of reading), and every sampled frame gets logged
+        under that one label — much faster than clicking through it live.
+        The video itself is processed in memory and deleted right after;
+        only the same numeric readings are kept. Up to 80MB per upload.
+      </p>
+      <div class="field-row">
+        <label for="bulk-upload-label">This whole video is</label>
+        <select id="bulk-upload-label">
+          <option value="READING">Reading</option>
+          <option value="WRITING">Writing</option>
+          <option value="MEMORIZING">Memorizing</option>
+          <option value="LOOKING_AWAY">Looking away</option>
+          <option value="PLAYING_WITH_PHONE">On phone</option>
+          <option value="AWAY_FROM_DESK">Away from desk</option>
+          <option value="SLEEPING_DROWSY">Drowsy</option>
+          <option value="TALKING">Talking</option>
+        </select>
+      </div>
+      <div class="recorder-controls">
+        <input type="file" id="bulk-upload-file" accept="video/*">
+        <button id="bulk-upload-btn" class="btn btn-primary">Upload &amp; extract examples</button>
+      </div>
+
+      <p class="consent-note" style="margin-top:16px;">
+        Or paste a Google Drive share link to the video instead (must be
+        shared as "Anyone with the link"):
+      </p>
+      <div class="recorder-controls">
+        <input type="text" id="drive-link-input" placeholder="https://drive.google.com/file/d/..." style="flex:1;">
+        <button id="drive-link-btn" class="btn btn-secondary">Fetch from Drive</button>
+      </div>
+      <p id="bulk-upload-status" class="consent-note"></p>
+    </div>
+  </section>
+
+  <section class="entry" id="report-panel" hidden>
+    <h2>Session report</h2>
+    <pre id="report-text"></pre>
+    <div class="report-actions">
+      <button id="download-btn" class="btn btn-secondary">Download report</button>
+      <button id="new-session-btn" class="btn btn-primary">Start another session</button>
+    </div>
+  </section>
+
+  <section class="entry" id="history-panel">
+    <h2>Past sessions</h2>
+    <ul id="history-list"><li class="muted">No sessions yet.</li></ul>
+  </section>
+
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

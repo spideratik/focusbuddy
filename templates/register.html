@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create account — FocusBuddy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page auth-page">
+  <header class="masthead">
+    <span class="eyebrow">Study companion</span>
+    <h1>FocusBuddy</h1>
+  </header>
+
+  <section class="entry">
+    <h2>Create your family's account</h2>
+    <p class="consent-note">
+      Your sessions, recorded clips, and any trained model are private to
+      this account — other families using FocusBuddy can't see or hear
+      them, and you can't see theirs.
+    </p>
+    <div class="field-row">
+      <label for="username">Username</label>
+      <input type="text" id="username" autocomplete="username">
+    </div>
+    <div class="field-row">
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="new-password">
+    </div>
+    <p class="consent-note" id="error-message" hidden></p>
+    <button id="register-btn" class="btn btn-primary">Create account</button>
+    <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+  </section>
+</div>
+
+<script>
+document.getElementById('register-btn').addEventListener('click', async () => {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const errorEl = document.getElementById('error-message');
+  errorEl.hidden = true;
+
+  const res = await fetch('/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+  const data = await res.json();
+  if (data.ok) {
+    window.location.href = '/';
+  } else {
+    errorEl.textContent = data.error || 'Could not create account.';
+    errorEl.hidden = false;
+  }
+});
+
+document.getElementById('password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('register-btn').click();
+});
+</script>
+</body>
+</html>

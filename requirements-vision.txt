@@ -1,0 +1,13 @@
+# Enables the full real pipeline: YOLOv8 object detection (person/book/cell
+# phone are real COCO classes) + YOLOv8-pose (real body keypoints) - see
+# app/vision_pipeline.py. Without this, the app automatically falls back to
+# the OpenCV Haar-cascade heuristic (app/focus_detector.py), mapped into the
+# same 9-state output - nothing breaks if this fails to install.
+#
+# IMPORTANT if you're on an Intel Mac: PyTorch dropped macOS x86_64 support
+# starting with version 2.3 (April 2024) - the last compatible build was
+# 2.2.2. This will likely fail to install, or pull that old unsupported
+# version, on Intel Mac hardware. It should install fine on Apple Silicon
+# Macs and on Linux (including an ARM64 cloud VM, e.g. Oracle Cloud's
+# Always Free Ampere tier).
+ultralytics==8.4.144

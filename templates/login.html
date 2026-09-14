@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — FocusBuddy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page auth-page">
+  <header class="masthead">
+    <span class="eyebrow">Study companion</span>
+    <h1>FocusBuddy</h1>
+  </header>
+
+  <section class="entry">
+    <h2>Log in</h2>
+    <div class="field-row">
+      <label for="username">Username</label>
+      <input type="text" id="username" autocomplete="username">
+    </div>
+    <div class="field-row">
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password">
+    </div>
+    <p class="consent-note" id="error-message" hidden></p>
+    <button id="login-btn" class="btn btn-primary">Log in</button>
+    <p class="auth-switch">No account yet? <a href="/register">Create one</a></p>
+  </section>
+</div>
+
+<script>
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const errorEl = document.getElementById('error-message');
+  errorEl.hidden = true;
+
+  const res = await fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+  const data = await res.json();
+  if (data.ok) {
+    window.location.href = '/';
+  } else {
+    errorEl.textContent = data.error || 'Could not log in.';
+    errorEl.hidden = false;
+  }
+});
+
+document.getElementById('password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('login-btn').click();
+});
+</script>
+</body>
+</html>
