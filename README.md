@@ -678,3 +678,4 @@ this one.
    build and test in this environment. Turning it into an iOS/Android app
    would mean a separate build (e.g. React Native or a WebView wrapper) with
    its own app-store review — a real next step, but a different project.
+# focusbuddy
